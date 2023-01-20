@@ -17,6 +17,11 @@ class ClientesController extends Controller
     public function add_cliente (Request $request){
         $cliente = new Clientes();
         $cliente->nome = $request->nome;
+        $cliente->rg = $request->rg;
+        $cliente->email = $request->email;
+        $cliente->telefone = $request->numero;
+        $cliente->endereço = $request->endereço;
+        $cliente->foto = 'teste foto';
 
         $cliente->save();
     }
