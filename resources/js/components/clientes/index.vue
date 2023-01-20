@@ -1,3 +1,32 @@
+<script setup>
+import { assertExpressionStatement } from '@babel/types';
+import { onMounted, ref } from 'vue';
+import { useRouter } from "vue-router"
+
+const router = useRouter()
+
+let clientes = ref([])
+
+onMounted(async () => {
+    getClientes()
+})
+
+const newCliente = () => {
+    useRouter.push('/cliente/new')
+}
+
+const getClientes = async () => {
+    let response = await axios.get("/api/get_all_clientes")
+    clientes.value = response.data.clientes
+    console.log('clientes', clientes.value)
+}
+
+const ourImage = (img) => {
+    return "/upload/"+img
+}
+
+</script>
+
 <template>
     <div class="container">
       
@@ -8,7 +37,7 @@
                   <h1 class="my-1">Products</h1>
               </div>
               <div class="customers__titlebar--item">
-                  <button class="btn btn-secondary my-1" >
+                  <button class="btn btn-secondary my-1" @click="newCliente">
                       Add Product
                   </button>
               </div>
@@ -29,12 +58,12 @@
           </div>
   
           <!-- product 1 -->
-          <div class="table--items products__list__item" >
+          <div class="table--items products__list__item" v-for="pessoa in clientes" :key="pessoa.id" v-if="clientes.lenght > 0">
               <div class="products__list__item--imgWrapper">
-                  <img class="products__list__item--img"  style="height: 40px;">
+                  <img class="products__list__item--img" :src="ourImage(pessoa.photo)"  style="height: 40px;" v-if="pessoa.photo">
               </div>
               <a href="# " class="table--items--col2">
-                  Product name
+                  {{ pessoa.nome }}
               </a>
               <p class="table--items--col2">
                   type
@@ -50,6 +79,9 @@
                       <i class="far fa-trash-alt"></i>
                   </button>
               </div>
+          </div>
+          <div class="table--items products__list__item" v-else>
+            <p> Nenhum Cliente Encontrado</p>
           </div>
   
       </div>

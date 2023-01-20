@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import clientesIndex from '../components/clientes/index.vue'
+import clienteNew from '../components/clientes/new.vue'
 
 import notFound from '../components/notFound.vue'
 
@@ -9,6 +10,10 @@ const routes = [
     {
         path:'/',
         component: clientesIndex
+    },
+    {
+        path:'/cliente/new',
+        component: clienteNew
     },
     {
         path:'/:pathMatch(.*)*',
