@@ -1,17 +1,37 @@
 <script setup>
-    import { toStatement } from "@babel/types";
-    import { ref } from "vue"
-    import { useRouter } from "vue-router";
-
-    const router = useRouter()
+    import { assertExpressionStatement, toStatement } from '@babel/types';
+    import { onMounted, ref, defineProps } from 'vue';
+    import { useRouter } from 'vue-router';
 
     let form = ref({
+
+        id:'',
         nome:'',
         rg:'',
         email:'',
         numero:'',
         endereço:''
     })
+
+    onMounted(async () => {
+        getSingleClient()
+    })
+
+    const props = defineProps({
+        id:{
+            type:String,
+            default:''
+        }
+    })
+
+    const getSingleClient = async () => {
+        let response = await axios.get(`/api/get_edit_cliente/${props.id}`)
+        //let response = await axios.get('/api/get_edit_cliente/1')
+        //console.log(response);
+        form.value = response.data.cliente
+    }
+    
+    const router = useRouter()
 
     const getPhoto = () => {
         let photo = "/upload/image.png"
@@ -39,7 +59,7 @@
         reader.readAsDataURL(file);
     }
 
-    const saveCliente = () => {
+    const updateCliente = () => {
         const formData = new FormData()
         formData.append('nome', form.value.nome)
         formData.append('rg', form.value.rg)
@@ -48,28 +68,26 @@
         formData.append('endereço', form.value.endereço)
         formData.append('photo', form.value.photo)
 
-        axios.post("/api/add_cliente",formData)
-        .then((response)=>{
-            form.value.name=''
-            form.value.rg=''
-            form.value.email=''
-            form.value.numero=''
-            form.value.endereço=''
-            form.value.photo=''
+        axios.post('/api/update_cliente/${form.value.id}', formData)
+            .then((response)=> {
+                form.value.name=''
+                form.value.rg=''
+                form.value.email=''
+                form.value.numero=''
+                form.value.endereço=''
+                form.value.photo=''
 
-            router.push('/')
+                router.push('/')
 
-            toStatement.fire({
-                icon:"sucess",
-                title:"Cliente adicionado com sucesso"
+                toast.fire({
+                    icon:"sucess",
+                    title:"Cliente atualizado com sucesso"
+                })
             })
+            .catch((error) => {
 
-        })
-        .catch((error) => {
-
-        })
+            })
     }
-
 </script>
 
 <template>
@@ -128,7 +146,7 @@
     <!-- Footer Bar -->
     <div class="dflex justify-content-between align-items-center my-3">
         <p ></p>
-        <button class="btn btn-secondary" @click="saveCliente()" >Save</button>
+        <button class="btn btn-secondary" @click="updateCliente()" >Save</button>
     </div>
 
 </div>

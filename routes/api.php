@@ -13,3 +13,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/get_all_clientes', [ClientesController::class, 'get_all_clientes']);
 
 Route::post('/add_cliente', [ClientesController::class, 'add_cliente']);
+
+Route::get('/get_edit_cliente/{id}', [ClientesController::class, 'get_edit_cliente']);
+
+Route::post('/update_cliente/{id}', [ClientesController::class, 'update_cliente']);
+
+Route::get('/delete_cliente/{id}', [ClientesController::class, 'delete_cliente']);
