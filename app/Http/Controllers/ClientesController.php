@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Clientes;
 use Image;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
+
 class ClientesController extends Controller
 {
     public function get_all_clientes(){
@@ -22,7 +25,8 @@ class ClientesController extends Controller
         $cliente->email = $request->email;
         $cliente->telefone = $request->numero;
         $cliente->endereço = $request->endereço;
-        if($request->photo!=""){
+        
+        if($request->photo !== 'image.png'){
             $strpos = strpos($request->photo,';');
             $sub = substr($request->photo,0,$strpos);
             $ex = explode('/',$sub)[1];
@@ -37,6 +41,7 @@ class ClientesController extends Controller
         }
 
         $cliente->save();
+        Mail::to($request->email)->send(new TestMail());
     }
 
     public function get_edit_cliente($id){

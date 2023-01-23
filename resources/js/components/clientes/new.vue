@@ -46,28 +46,47 @@
         formData.append('email', form.value.email)
         formData.append('numero', form.value.numero)
         formData.append('endereço', form.value.endereço)
-        formData.append('photo', form.value.photo)
 
-        axios.post("/api/add_cliente",formData)
-        .then((response)=>{
-            form.value.name=''
-            form.value.rg=''
-            form.value.email=''
-            form.value.numero=''
-            form.value.endereço=''
-            form.value.photo=''
+        console.log(formData);
 
-            router.push('/')
+        if(typeof(form.value.photo) == 'undefined'){
+            formData.append('photo', 'image.png')
+        }else{
+            formData.append('photo', form.value.photo)
+        }
 
-            toStatement.fire({
-                icon:"sucess",
-                title:"Cliente adicionado com sucesso"
+        if(form.value.nome == "" || form.value.rg == "" || form.value.email == "" || form.value.numero == "" || form.value.endereço == ""){
+            toast.fire({
+                icon:"warning",
+                title:"Preencha todos os campos"
             })
+        }else if(!/^[^@]+@\w+(\.\w+)+\w$/.test(form.value.email)){
+            toast.fire({
+                icon:"warning",
+                title:"email Invalido"
+            })
+        }else{
+            axios.post("/api/add_cliente",formData)
+                .then((response)=>{
+                form.value.name=''
+                form.value.rg=''
+                form.value.email=''
+                form.value.numero=''
+                form.value.endereço=''
+                form.value.photo=''
 
-        })
-        .catch((error) => {
+                router.push('/')
 
-        })
+                toast.fire({
+                    icon:"sucess",
+                    title:"Cliente adicionado com sucesso"
+                })
+
+            })
+            .catch((error) => {
+
+            })
+        }
     }
 
 </script>
@@ -90,16 +109,16 @@
         <div class="products__create__main">
             <div class="products__create__main--addInfo card py-2 px-2 bg-white">
                 <p class="mb-1">Nome</p>
-                <input type="text" class="input" v-model="form.nome">
+                <input type="text" class="input" v-model="form.nome" required>
 
                 <p class="my-1">RG</p>
-                <input type="text" class="input" v-model="form.rg">
+                <input type="text" class="input" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="9" v-model="form.rg">
 
                 <p class="my-1">Email</p>
                 <input type="text" class="input" v-model="form.email">
 
                 <p class="my-1">Numero de Telefone</p>
-                <input type="text" class="input" v-model="form.numero">
+                <input type="text" class="input" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="14" v-model="form.numero">
 
                 <p class="my-1">Endereço</p>
                 <input type="text" class="input" v-model="form.endereço">

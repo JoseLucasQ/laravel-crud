@@ -26,8 +26,6 @@
 
     const getSingleClient = async () => {
         let response = await axios.get(`/api/get_edit_cliente/${props.id}`)
-        //let response = await axios.get('/api/get_edit_cliente/1')
-        //console.log(response);
         form.value = response.data.cliente
     }
     
@@ -64,7 +62,7 @@
         formData.append('nome', form.value.nome)
         formData.append('rg', form.value.rg)
         formData.append('email', form.value.email)
-        formData.append('numero', form.value.numero)
+        formData.append('numero', form.value.telefone)
         formData.append('endereço', form.value.endereço)
         formData.append('photo', form.value.photo)
 
@@ -117,7 +115,7 @@
                 <input type="text" class="input" v-model="form.email">
 
                 <p class="my-1">Numero de Telefone</p>
-                <input type="text" class="input" v-model="form.numero">
+                <input type="text" class="input" v-model="form.telefone">
 
                 <p class="my-1">Endereço</p>
                 <input type="text" class="input" v-model="form.endereço">

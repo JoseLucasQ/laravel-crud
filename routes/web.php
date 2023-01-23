@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\TestMail;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/email', function() {
+    Mail::to('jlucasquinho1@gmail.com')->send(new TestMail());
 });
 
 Route::get('/{pathMatch}', function(){ return view('welcome');})->where('pathMatch',".*");

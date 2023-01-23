@@ -12,7 +12,7 @@ onMounted(async () => {
 })
 
 const newCliente = () => {
-    useRouter.push('/cliente/new')
+    router.push('/cliente/new')
 }
 
 const getClientes = async () => {
@@ -61,9 +61,20 @@ const deleteCliente = (id) => {
 
 <template>
     <div class="container">
+        <div class="customers__titlebar dflex justify-content-between align-items-center">
+                <div class="customers__titlebar--item">
+                    <h1 class="my-1">Clientes</h1>
+                </div>
+                <div class="customers__titlebar--item">
+                    <button class="btn btn-secondary my-1" @click="newCliente">
+                        Adicionar Cliente
+                    </button>
+                </div>
+            </div>
       <table>
   <tr>
     <th>Foto</th>
+    <th>Nome</th>
     <th>RG</th>
     <th>Email</th>
     <th>Telefone</th>
@@ -71,17 +82,20 @@ const deleteCliente = (id) => {
     <th>Açoes</th>
   </tr>
   <tr v-for="pessoa in clientes" :key="pessoa.id">
+    <td><img class="products__list__item--img" :src="ourImage(pessoa.foto)"  style="height: 40px;" v-if="pessoa.foto"></td>
     <td>{{ pessoa.nome }}</td>
     <td>{{ pessoa.rg }}</td>
     <td>{{ pessoa.email }}</td>
     <td>{{ pessoa.telefone }}</td>
     <td>{{ pessoa.endereço }}</td>
-    <td>                  <button class="btn-icon btn-icon-success" @click="onEdit(pessoa.id)">
-                      <i class="fas fa-pencil-alt"></i>
-                  </button>
-                  <button class="btn-icon btn-icon-danger" @click="deleteCliente(pessoa.id)">
-                      <i class="far fa-trash-alt"></i>
-                  </button></td>
+    <td>                  
+        <button class="btn-icon btn-icon-success" @click="onEdit(pessoa.id)">
+            <i class="fas fa-pencil-alt"></i>
+        </button>
+        <button class="btn-icon btn-icon-danger" @click="deleteCliente(pessoa.id)">
+            <i class="far fa-trash-alt"></i>
+        </button>
+    </td>
   </tr>
 </table>
 
